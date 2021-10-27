@@ -97,6 +97,10 @@ export default {
 </script>
 
 <style>
+:root {
+  --fret-width: 90px;
+}
+
 body {
   display: flex;
   justify-content: center;
@@ -107,7 +111,6 @@ body {
 }
 .fretboard {
   position: relative;
-  width: 1200px;
 }
 .strings {
   display: flex;
@@ -118,7 +121,6 @@ body {
 .string-wrap {
   position: relative;
   width: 100%;
-  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -135,20 +137,25 @@ body {
   background: #000;
 }
 .string-fret {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   z-index: 5;
+  height: 50px;
   border-radius: 15px;
   text-align: center;
-  width: 90px;
+  width: var(--fret-width);
 }
 .string-fret-indicator {
+  font-size: 16px;
   font-family: sans-serif;
   font-weight: bold;
   display: inline-flex;
   background: white;
-  border-radius: 15px;
-  height: 15px;
-  width: 15px;
+  border-radius: 30px;
+  height: 30px;
+  width: 30px;
   padding: 5px;
   border: 1px solid black;
   text-align: center;
@@ -170,7 +177,7 @@ body {
   position: relative;
   font-size: 40px;
   height: 100%;
-  width: 90px;
+  width: var(--fret-width);
   border-right: 1px solid black;
 }
 .dots {
