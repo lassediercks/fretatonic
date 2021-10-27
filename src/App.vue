@@ -1,18 +1,40 @@
 <template>
   <!-- Strings: <input type="number" v-model="strings" /> -->
+  key:
+  <select v-model="selectedKey">
+    <option :value="keyNote" v-for="keyNote in notes" :key="keyNote">
+      {{ keyNote }}
+    </option>
+  </select>
   <br />
   <br />
+  scale:
+  <select v-model="scale">
+    <option
+      :value="scaleName"
+      v-for="(scaleSelect, scaleName) in scalesIndexes"
+      :key="scaleSelect"
+    >
+      {{ scaleName }}
+    </option>
+  </select>
+  <!-- {{ Object.entries(scales) }} -->
   <div class="fretboard">
     <div class="strings">
       <div
         class="string-wrap"
-        v-for="(string, index) in [...Array(strings)]"
-        :key="`string-${index}`"
+        v-for="(s, string) in [...Array(strings)]"
+        :key="`string-${string}`"
       >
-        <div class="string-fret" v-for="(fret, findex) in frets" :key="fret">
-          <div class="string-fret-indicator">
-            {{ notes[findex + notes.indexOf(tuning[index])] }}
-          </div>
+        <div
+          class="string-fret"
+          v-for="(f, fretposition) in frets"
+          :key="fretposition"
+        >
+          <Indicator
+            :note="getNote(fretposition, string)"
+            :inScale="currentScale.includes(getNote(fretposition, string))"
+          />
         </div>
         <div class="string"></div>
       </div>
@@ -29,76 +51,64 @@
 </template>
 
 <script>
-const notes = [
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-  "C",
-  "C#",
-  "D",
-  "D#",
-  "E",
-  "F",
-  "F#",
-  "G",
-  "G#",
-  "A",
-  "A#",
-  "B",
-];
 const singleDotFrets = [3, 5, 7, 9, 15, 17, 19, 21];
 const tuning = ["E", "A", "D", "G", "B", "E"];
+
+const scalesIndexes = {
+  major: [0, 2, 4, 5, 7, 9, 11],
+  minor: [0, 2, 3, 5, 7, 8, 10],
+};
+
+import Indicator from "./components/indicator.vue";
+import { notes } from "./util";
+
 export default {
   name: "App",
-  components: {},
+  components: { Indicator },
   data() {
     return {
+      test: "minor",
+      scale: "major",
+      selectedKey: "E",
       tuning: tuning.reverse(),
+      fretboardnotes: new Array(5).fill(notes).flat(),
       notes,
       strings: 6,
       singleDotFrets,
       frets: 20,
+      scalesIndexes,
     };
+  },
+  computed: {
+    currentScale() {
+      let notesInKey = Array.from(notes);
+      notesInKey = notesInKey.concat(
+        notesInKey.splice(0, notes.indexOf(this.selectedKey))
+      );
+      let result = [];
+      notesInKey.forEach((note) => {
+        let index = notesInKey.indexOf(note);
+        if (scalesIndexes[this.scale].includes(index)) {
+          result.push(note);
+        }
+      });
+      return result;
+    },
+  },
+  methods: {
+    getNote(fretposition, string) {
+      return this.fretboardnotes[fretposition + notes.indexOf(tuning[string])];
+    },
+    // thePenatoniker(){
+
+    // }
   },
 };
 </script>
 
 <style>
 :root {
-  --fret-width: 90px;
+  --fret-width: 70px;
 }
 
 body {
@@ -149,21 +159,6 @@ body {
 }
 .string-fret:first-child .string-fret-indicator {
   transform: translateX(-30px);
-}
-.string-fret-indicator {
-  font-size: 16px;
-  font-family: sans-serif;
-  font-weight: bold;
-  display: inline-flex;
-  background: white;
-  border-radius: 30px;
-  height: 30px;
-  width: 30px;
-  padding: 5px;
-  border: 1px solid black;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
 }
 
 .frets {
