@@ -1,5 +1,5 @@
 <template>
-  Strings: <input type="number" v-model="strings" />
+  <!-- Strings: <input type="number" v-model="strings" /> -->
   <br />
   <br />
   <div class="fretboard">
@@ -9,7 +9,11 @@
         v-for="(string, index) in [...Array(strings)]"
         :key="`string-${index}`"
       >
-        <div class="string-fret" v-for="fret in frets" :key="fret"></div>
+        <div class="string-fret" v-for="(fret, findex) in frets" :key="fret">
+          <div class="string-fret-indicator">
+            {{ notes[findex + notes.indexOf(tuning[index])] }}
+          </div>
+        </div>
         <div class="string"></div>
       </div>
     </div>
@@ -25,12 +29,65 @@
 </template>
 
 <script>
+const notes = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
 const singleDotFrets = [3, 5, 7, 9, 15, 17, 19, 21];
+const tuning = ["E", "A", "D", "G", "B", "E"];
 export default {
   name: "App",
   components: {},
   data() {
     return {
+      tuning: tuning.reverse(),
+      notes,
       strings: 6,
       singleDotFrets,
       frets: 20,
@@ -64,6 +121,7 @@ body {
   height: 30px;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .string {
@@ -75,6 +133,27 @@ body {
   flex: 1;
   height: 2px;
   background: #000;
+}
+.string-fret {
+  position: relative;
+  z-index: 5;
+  border-radius: 15px;
+  text-align: center;
+  width: 90px;
+}
+.string-fret-indicator {
+  font-family: sans-serif;
+  font-weight: bold;
+  display: inline-flex;
+  background: white;
+  border-radius: 15px;
+  height: 15px;
+  width: 15px;
+  padding: 5px;
+  border: 1px solid black;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .frets {
