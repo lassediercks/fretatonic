@@ -1,9 +1,12 @@
 <template>
+  Strings: <input type="number" v-model="strings" />
+  <br />
+  <br />
   <div class="fretboard">
     <div class="strings">
       <div
         class="string-wrap"
-        v-for="(string, index) in [...Array(6)]"
+        v-for="(string, index) in [...Array(strings)]"
         :key="`string-${index}`"
       >
         <div class="string-fret" v-for="fret in frets" :key="fret"></div>
@@ -28,8 +31,9 @@ export default {
   components: {},
   data() {
     return {
+      strings: 6,
       singleDotFrets,
-      frets: 21,
+      frets: 20,
     };
   },
 };
@@ -47,16 +51,11 @@ body {
 .fretboard {
   position: relative;
   width: 1200px;
-  height: 200px;
 }
 .strings {
-  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  left: 0;
-  top: 0;
-  bottom: 0;
   width: 100%;
 }
 .string-wrap {
@@ -79,6 +78,11 @@ body {
 }
 
 .frets {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
   height: 100%;
   display: flex;
 }
