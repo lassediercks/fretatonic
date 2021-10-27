@@ -147,6 +147,9 @@ body {
   text-align: center;
   width: var(--fret-width);
 }
+.string-fret:first-child .string-fret-indicator {
+  transform: translateX(-30px);
+}
 .string-fret-indicator {
   font-size: 16px;
   font-family: sans-serif;
@@ -179,6 +182,9 @@ body {
   height: 100%;
   width: var(--fret-width);
   border-right: 1px solid black;
+}
+.fret:first-child {
+  border-right-width: 3px;
 }
 .dots {
   position: absolute;
