@@ -27,6 +27,10 @@
       {{ scaleName }}
     </option>
   </select>
+  <template v-if="scale">
+    scaleposition:
+    <input type="checkbox" v-model="showscaleposition" />
+  </template>
   <br /><br />
   Chord:
   <select v-model="selectedChord">
@@ -41,6 +45,7 @@
   </select>
   <br />
   <br />
+
   <!-- {{ Object.entries(scales) }} -->
 
   <div class="fretboard">
@@ -56,6 +61,10 @@
           :key="fretposition"
         >
           <Indicator
+            :show-position="showscaleposition"
+            :scale-position="
+              1 + currentScale.indexOf(getNote(fretposition, string))
+            "
             :note="getNote(fretposition, string)"
             :inChord="currentChord.includes(getNote(fretposition, string))"
             :inScale="currentScale.includes(getNote(fretposition, string))"
@@ -127,6 +136,7 @@ export default {
       forthstringtune: "G",
       fifthstringtune: "B",
       sixthstringtune: "E",
+      showscaleposition: false,
       scale: null,
       selectedChord: null,
       selectedKey: "E",
@@ -214,7 +224,7 @@ body {
   padding: 0;
 }
 .fretboard {
-  margin: 16px 0;
+  margin: 30px 0;
   position: relative;
 }
 .strings {
@@ -247,7 +257,7 @@ body {
   justify-content: center;
   position: relative;
   z-index: 5;
-  height: 50px;
+  height: 60px;
   border-radius: 15px;
   text-align: center;
   width: var(--fret-width);
@@ -273,6 +283,7 @@ body {
   border-right: 1px solid black;
 }
 .fret-number {
+  padding: 16px 0;
   position: absolute;
   bottom: 100%;
   width: 100%;

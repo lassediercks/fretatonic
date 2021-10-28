@@ -7,12 +7,21 @@
     ]"
   >
     {{ note }}
+    <span
+      v-show="showPosition"
+      class="scalePosition"
+      v-if="scalePosition !== 0"
+    >
+      {{ scalePosition }}
+    </span>
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    showPosition: Boolean,
+    scalePosition: Number,
     note: String,
     inChord: Boolean,
     inScale: Boolean,
@@ -22,6 +31,7 @@ export default {
 
 <style>
 .string-fret-indicator {
+  position: relative;
   --size: 25px;
   font-size: 16px;
   font-weight: bold;
@@ -35,6 +45,11 @@ export default {
   text-align: center;
   justify-content: center;
   align-items: center;
+}
+.scalePosition {
+  position: absolute;
+  font-size: 14px;
+  bottom: 100%;
 }
 .string-fret-indicator.inScale {
   background: #68cbd8;
