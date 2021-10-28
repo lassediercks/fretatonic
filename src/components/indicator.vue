@@ -49,6 +49,7 @@ export default {
 .scalePosition {
   position: absolute;
   font-size: 14px;
+  color: black;
   bottom: 100%;
 }
 .string-fret-indicator.inScale {
