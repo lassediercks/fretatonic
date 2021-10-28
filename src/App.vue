@@ -1,5 +1,6 @@
 <template>
   <!-- Strings: <input type="number" v-model="strings" /> -->
+  {{ newTuning }}
   key:
   <select v-model="selectedKey">
     <option :value="keyNote" v-for="keyNote in notes" :key="keyNote">
@@ -18,7 +19,10 @@
       {{ scaleName }}
     </option>
   </select>
+  <br />
+  <br />
   <!-- {{ Object.entries(scales) }} -->
+
   <div class="fretboard">
     <div class="strings">
       <div
@@ -48,11 +52,42 @@
       </div>
     </div>
   </div>
+
+  <br />
+  <br />
+  tuning:
+  <div>
+    <select v-model="firststringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option>
+    </select>
+    <select v-model="secondstringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option></select
+    ><select v-model="thirdstringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option></select
+    ><select v-model="forthstringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option></select
+    ><select v-model="fifthstringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option></select
+    ><select v-model="sixthstringtune">
+      <option :value="tuneNote" v-for="tuneNote in notes" :key="tuneNote">
+        {{ tuneNote }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
 const singleDotFrets = [3, 5, 7, 9, 15, 17, 19, 21];
-const tuning = ["E", "A", "D", "G", "B", "E"];
 
 const scalesIndexes = {
   major: [0, 2, 4, 5, 7, 9, 11],
@@ -71,10 +106,15 @@ export default {
   components: { Indicator },
   data() {
     return {
+      firststringtune: "E",
+      secondstringtune: "A",
+      thirdstringtune: "D",
+      forthstringtune: "G",
+      fifthstringtune: "B",
+      sixthstringtune: "E",
       test: "minor",
       scale: "major",
       selectedKey: "E",
-      tuning: tuning.reverse(),
       fretboardnotes: new Array(5).fill(notes).flat(),
       notes,
       strings: 6,
@@ -84,6 +124,17 @@ export default {
     };
   },
   computed: {
+    tuning() {
+      return [
+        this.firststringtune,
+        this.secondstringtune,
+        this.thirdstringtune,
+        this.forthstringtune,
+        this.fifthstringtune,
+        this.sixthstringtune,
+      ].reverse();
+    },
+
     currentScale() {
       let notesInKey = Array.from(notes);
       notesInKey = notesInKey.concat(
@@ -101,7 +152,9 @@ export default {
   },
   methods: {
     getNote(fretposition, string) {
-      return this.fretboardnotes[fretposition + notes.indexOf(tuning[string])];
+      return this.fretboardnotes[
+        fretposition + notes.indexOf(this.tuning[string])
+      ];
     },
     // thePenatoniker(){
 
