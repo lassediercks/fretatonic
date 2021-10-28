@@ -1,6 +1,13 @@
 <template>
   <!-- Strings: <input type="number" v-model="strings" /> -->
-  {{ newTuning }}
+  <br />
+  <br />
+  layout:
+  <select v-model="frets">
+    <option :value="20">normal</option>
+    <option :value="13">small</option>
+  </select>
+  <br /><br />
   key:
   <select v-model="selectedKey">
     <option :value="keyNote" v-for="keyNote in notes" :key="keyNote">
@@ -11,12 +18,25 @@
   <br />
   scale:
   <select v-model="scale">
+    <option :value="null">No Scale</option>
     <option
       :value="scaleName"
       v-for="(scaleSelect, scaleName) in scalesIndexes"
       :key="scaleSelect"
     >
       {{ scaleName }}
+    </option>
+  </select>
+  <br /><br />
+  Chord:
+  <select v-model="selectedChord">
+    <option :value="null">No Chord</option>
+    <option
+      :value="chordname"
+      v-for="(chord, chordname) in chords"
+      :key="chord"
+    >
+      {{ chordname }}
     </option>
   </select>
   <br />
@@ -37,6 +57,7 @@
         >
           <Indicator
             :note="getNote(fretposition, string)"
+            :inChord="currentChord.includes(getNote(fretposition, string))"
             :inScale="currentScale.includes(getNote(fretposition, string))"
           />
         </div>
@@ -45,6 +66,9 @@
     </div>
     <div class="frets">
       <div class="fret" v-for="(fret, index) in frets" :key="fret">
+        <span class="fret-number">
+          {{ index }}
+        </span>
         <div class="dots">
           <template v-if="singleDotFrets.includes(index)">&#183;</template>
           <template v-if="index == 12">&#183;&#183;</template>
@@ -90,7 +114,7 @@
 const singleDotFrets = [3, 5, 7, 9, 15, 17, 19, 21];
 
 import Indicator from "./components/indicator.vue";
-import { notes, scalesIndexes } from "./util";
+import { notes, scalesIndexes, chords } from "./util";
 
 export default {
   name: "App",
@@ -103,15 +127,16 @@ export default {
       forthstringtune: "G",
       fifthstringtune: "B",
       sixthstringtune: "E",
-      test: "minor",
-      scale: "major",
+      scale: null,
+      selectedChord: null,
       selectedKey: "E",
       fretboardnotes: new Array(5).fill(notes).flat(),
-      notes,
       strings: 6,
-      singleDotFrets,
       frets: 20,
+      singleDotFrets,
       scalesIndexes,
+      notes,
+      chords,
     };
   },
   computed: {
@@ -125,15 +150,34 @@ export default {
         this.sixthstringtune,
       ].reverse();
     },
+    notesInKey() {
+      let newNotes = Array.from(notes);
+      return (newNotes = newNotes.concat(
+        newNotes.splice(0, notes.indexOf(this.selectedKey))
+      ));
+    },
+    currentChord() {
+      if (this.selectedChord === null) {
+        return [];
+      }
+      let result = [];
+      this.notesInKey.forEach((note) => {
+        if (
+          chords[this.selectedChord].includes(this.notesInKey.indexOf(note))
+        ) {
+          result.push(note);
+        }
+      });
+      return result;
+    },
 
     currentScale() {
-      let notesInKey = Array.from(notes);
-      notesInKey = notesInKey.concat(
-        notesInKey.splice(0, notes.indexOf(this.selectedKey))
-      );
+      if (this.scale === null) {
+        return [];
+      }
       let result = [];
-      notesInKey.forEach((note) => {
-        let index = notesInKey.indexOf(note);
+      this.notesInKey.forEach((note) => {
+        let index = this.notesInKey.indexOf(note);
         if (scalesIndexes[this.scale].includes(index)) {
           result.push(note);
         }
@@ -160,6 +204,8 @@ export default {
 }
 
 body {
+  font-family: sans-serif;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -168,6 +214,7 @@ body {
   padding: 0;
 }
 .fretboard {
+  margin: 16px 0;
   position: relative;
 }
 .strings {
@@ -221,15 +268,22 @@ body {
 
 .fret {
   position: relative;
-  font-size: 40px;
   height: 100%;
   width: var(--fret-width);
   border-right: 1px solid black;
+}
+.fret-number {
+  position: absolute;
+  bottom: 100%;
+  width: 100%;
+  text-align: center;
 }
 .fret:first-child {
   border-right-width: 3px;
 }
 .dots {
+  font-size: 40px;
+
   position: absolute;
   top: 100%;
   display: flex;

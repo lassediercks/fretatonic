@@ -23,3 +23,14 @@ export const scalesIndexes = {
   hungarianminor: [0, 2, 3, 6, 7, 8, 11],
   oriental: [0, 1, 4, 5, 6, 9, 10],
 };
+
+export const chords = {
+  major: [0, 4, 7],
+  minor: [0, 3, 7],
+  diminished: [0, 3, 6],
+  diminished7: [0, 3, 6, 9],
+  augmented: [0, 4, 8],
+  maj7: [0, 4, 7, 11],
+  sus2: [0, 5, 7],
+  sus4: [0, 2, 7],
+};

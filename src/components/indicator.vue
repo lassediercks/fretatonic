@@ -1,5 +1,11 @@
 <template>
-  <div :class="['string-fret-indicator', inScale && 'inScale']">
+  <div
+    :class="[
+      'string-fret-indicator',
+      inScale && 'inScale',
+      inChord && 'inChord',
+    ]"
+  >
     {{ note }}
   </div>
 </template>
@@ -8,6 +14,7 @@
 export default {
   props: {
     note: String,
+    inChord: Boolean,
     inScale: Boolean,
   },
 };
@@ -15,13 +22,12 @@ export default {
 
 <style>
 .string-fret-indicator {
-  --size: 15px;
+  --size: 25px;
   font-size: 16px;
-  font-family: sans-serif;
   font-weight: bold;
   display: inline-flex;
   background: white;
-  border-radius: var(--size);
+  border-radius: 10px;
   height: var(--size);
   width: var(--size);
   padding: 5px;
@@ -31,6 +37,10 @@ export default {
   align-items: center;
 }
 .string-fret-indicator.inScale {
-  background: #9aff8f;
+  background: #68cbd8;
+}
+.string-fret-indicator.inChord {
+  color: white;
+  background: #640f3c;
 }
 </style>
