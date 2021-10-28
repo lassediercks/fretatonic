@@ -89,17 +89,8 @@
 <script>
 const singleDotFrets = [3, 5, 7, 9, 15, 17, 19, 21];
 
-const scalesIndexes = {
-  major: [0, 2, 4, 5, 7, 9, 11],
-  minor: [0, 2, 3, 5, 7, 8, 10],
-  bluesmajor: [0, 3, 5, 6, 7, 9],
-  pentatonicmajor: [0, 2, 4, 7, 9],
-  pentatonicminor: [0, 3, 5, 7, 10],
-  bluesminor: [0, 3, 5, 6, 7, 10],
-};
-
 import Indicator from "./components/indicator.vue";
-import { notes } from "./util";
+import { notes, scalesIndexes } from "./util";
 
 export default {
   name: "App",
